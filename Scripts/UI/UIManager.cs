@@ -672,7 +672,9 @@ public class UIManager : MonoBehaviour
             s != null ? s.Language : 0,
             (idx) => { if (s != null) { s.Language = idx; s.Save(); } });
 
-        yPos = BuildNavigationRow(content, "\uD83D\uDCCA  Статистика", yPos, null);
+        yPos = BuildNavigationRow(content, "\uD83D\uDCCA  Статистика", yPos, () => {
+            ShowStatisticsDialog();
+        });
 
         yPos = BuildNavigationRow(content, "\u21BA  Сбросить настройки", yPos, () => {
             if (s != null)
@@ -684,12 +686,14 @@ public class UIManager : MonoBehaviour
             }
         });
 
-        yPos = BuildNavigationRow(content, "\uD83C\uDFA7  Поддержка", yPos, null);
+        yPos = BuildNavigationRow(content, "\uD83C\uDFA7  Поддержка", yPos, () => {
+            ShowSupportDialog();
+        });
 
         yPos = BuildNavigationRow(content, "\u24D8  О приложении", yPos, () => {
-            ShowDialog("О приложении",
-                "Caless v1.0\n\nСтратегическая настольная игра\nс 12 уникальными фигурами\nна доске 10\u00D710.\n\n\u00A9 2025",
-                "Закрыть", () => { HideAll(); BuildTabLayout(); });
+            ShowDialog(LocalizationManager.Get("ABOUT_TEXT"),
+                LocalizationManager.Get("ABOUT_TEXT"),
+                LocalizationManager.Get("CLOSE"), () => { HideAll(); BuildTabLayout(); });
         });
 
         yPos -= 40f;
@@ -1811,5 +1815,41 @@ public class UIManager : MonoBehaviour
         img.preserveAspect = true;
         img.raycastTarget = false;
         img.color = Color.white;
+    }
+}
+
+    private void ShowStatisticsDialog()
+    {
+        StatisticsManager stats = (gameManager != null) ? gameManager.statistics : null;
+        if (stats == null) return;
+
+        string statsText = "📊 СТАТИСТИКА\n\n";
+        statsText += "Против ИИ:\n";
+        statsText += "  Побед: " + stats.VsAIWins + "\n";
+        statsText += "  Поражений: " + stats.VsAILosses + "\n";
+        statsText += "  Ничьих: " + stats.VsAIDraws + "\n";
+        statsText += "  Процент побед: " + stats.GetWinRate().ToString("F1") + "%\n\n";
+        statsText += "Локальные игры: " + stats.LocalMultiplayerGames + "\n";
+        statsText += "Bluetooth игры: " + stats.BluetoothGames + "\n\n";
+        statsText += "Обучение:\n";
+        statsText += "  Решено: " + stats.TrainingPuzzlesSolved + "/" + stats.TrainingPuzzlesTotal + "\n\n";
+        statsText += "Всего:\n";
+        statsText += "  Игр: " + stats.TotalGamesPlayed + "\n";
+        statsText += "  Ходов: " + stats.TotalMovesPlayed + "\n";
+        statsText += "  Захватов: " + stats.TotalCapturesMade;
+
+        ShowDialog("Статистика", statsText, "Закрыть", () => { HideAll(); BuildTabLayout(); });
+    }
+
+    private void ShowSupportDialog()
+    {
+        string supportText = "🎧 ПОДДЕРЖКА\n\n";
+        supportText += "Свяжитесь с нами:\n\n";
+        supportText += "Email: support@caless.game\n";
+        supportText += "Website: www.caless.game\n";
+        supportText += "Discord: discord.gg/caless\n\n";
+        supportText += "Спасибо за игру!";
+
+        ShowDialog("Поддержка", supportText, "Закрыть", () => { HideAll(); BuildTabLayout(); });
     }
 }

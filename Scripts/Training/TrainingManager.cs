@@ -680,10 +680,16 @@ public class TrainingManager : MonoBehaviour
         gameManager.boardRenderer.ClearHighlights();
         gameManager.boardRenderer.ShowSelectedHighlight(pos.x, pos.y);
  
-        foreach (Move m in selectedMoves)
+        // Check if ShowPossibleMoves is enabled in settings
+        bool showMoves = (gameManager != null && gameManager.settings != null) ? gameManager.settings.ShowPossibleMoves : true;
+        
+        if (showMoves)
         {
-            bool isCapture = m.captured != CalessEngine.EMPTY;
-            gameManager.boardRenderer.ShowMoveHint(m.to.x, m.to.y, isCapture);
+            foreach (Move m in selectedMoves)
+            {
+                bool isCapture = m.captured != CalessEngine.EMPTY;
+                gameManager.boardRenderer.ShowMoveHint(m.to.x, m.to.y, isCapture);
+            }
         }
     }
 }

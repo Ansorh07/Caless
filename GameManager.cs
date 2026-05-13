@@ -18,6 +18,7 @@ public class GameManager : MonoBehaviour
     [HideInInspector] public BoardRenderer boardRenderer;
     [HideInInspector] public UIManager uiManager;
     [HideInInspector] public SettingsManager settings;
+    [HideInInspector] public StatisticsManager statistics;
     [HideInInspector] public TrainingManager trainingManager;
     [HideInInspector] public BluetoothManager bluetoothManager;
  
@@ -57,9 +58,14 @@ public class GameManager : MonoBehaviour
     {
         settings = gameObject.AddComponent<SettingsManager>();
         settings.Load();
+
+        statistics = gameObject.AddComponent<StatisticsManager>();
+        statistics.Load();
  
         boardRenderer = gameObject.AddComponent<BoardRenderer>();
         boardRenderer.SetSettings(settings);
+
+        LocalizationManager.SetLanguageByIndex(settings.Language);
  
         uiManager = gameObject.AddComponent<UIManager>();
         uiManager.gameManager = this;
@@ -256,17 +262,23 @@ public class GameManager : MonoBehaviour
         boardRenderer.ClearHighlights();
         boardRenderer.ShowSelectedHighlight(pos.x, pos.y);
  
-        foreach (Move m in selectedMoves)
+        // Check if ShowPossibleMoves is enabled in settings
+        bool showMoves = (settings != null) ? settings.ShowPossibleMoves : true;
+        
+        if (showMoves)
         {
-            if (m.isCastling)
-                boardRenderer.ShowCastleHint(m.to.x, m.to.y);
-            else
+            foreach (Move m in selectedMoves)
             {
-                bool isCapture = m.captured != CalessEngine.EMPTY || m.isDragonRanged;
-                boardRenderer.ShowMoveHint(m.to.x, m.to.y, isCapture);
+                if (m.isCastling)
+                    boardRenderer.ShowCastleHint(m.to.x, m.to.y);
+                else
+                {
+                    bool isCapture = m.captured != CalessEngine.EMPTY || m.isDragonRanged;
+                    boardRenderer.ShowMoveHint(m.to.x, m.to.y, isCapture);
+                }
             }
         }
-        // Подсветить Кал
+        // Highlight Kal (royal piece in check)
         if (engine.IsInCheck(engine.whiteTurn))
         {
             Vector2Int royalPos = GetVulnerableRoyalPos(engine.whiteTurn);

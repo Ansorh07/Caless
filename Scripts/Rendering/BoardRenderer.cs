@@ -37,6 +37,13 @@ public class BoardRenderer : MonoBehaviour
     public bool IsAnimating { get; private set; } = false;
 
     private Transform boardParent;
+
+    private Color GetHighlightColorFromSettings()
+    {
+        if (settings != null)
+            return settings.GetHighlightColor();
+        return new Color(0.85f, 0.70f, 0.30f, 0.6f); // Default gold
+    }
  
     public void SetSettings(SettingsManager settings)
     {
@@ -188,7 +195,8 @@ public class BoardRenderer : MonoBehaviour
     {
         Vector3 pos = GetWorldPosition(row, col);
         pos.z = -0.5f;
-        GameObject hl = CreateSprite("SelectedHL", pos, SELECTED_COLOR, 5);
+        Color selectColor = GetHighlightColorFromSettings();
+        GameObject hl = CreateSprite("SelectedHL", pos, selectColor, 5);
         hl.transform.SetParent(boardParent);
         highlightObjects.Add(hl);
     }
@@ -197,7 +205,12 @@ public class BoardRenderer : MonoBehaviour
     {
         Vector3 pos = GetWorldPosition(row, col);
         pos.z = 0.5f;
-        Color color = isCapture ? CAPTURE_HINT_COLOR : MOVE_HINT_COLOR;
+        Color color;
+        if (isCapture)
+            color = CAPTURE_HINT_COLOR;
+        else
+            color = GetHighlightColorFromSettings();
+        
         GameObject hint = CreateSprite("MoveHint", pos, color, 5);
         hint.transform.SetParent(boardParent);
  
