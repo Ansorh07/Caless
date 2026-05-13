@@ -1,0 +1,24 @@
+fileFormatVersion: 2
+guid: dacb25a768ca202409948c5fe1e2261a
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - gameManager: {instanceID: 0}
+  - menuBackgroundImage: {fileID: 21300000, guid: b02c2066f4c63404e8771e7865abfd3e, type: 3}
+  - titleImage: {instanceID: 0}
+  - subtitleImage: {instanceID: 0}
+  - profileIconImage: {instanceID: 0}
+  - trophyIconImage: {instanceID: 0}
+  - vsComputerCardImage: {fileID: 21300000, guid: 0753c5ed068f1184181c854b533798cf, type: 3}
+  - vsHumanCardImage: {fileID: 21300000, guid: 91d1a789f8c169d4eb3f452a410c9480, type: 3}
+  - bluetoothCardImage: {instanceID: 0}
+  - tabBarBackgroundImage: {instanceID: 0}
+  - tabPlayIconImage: {instanceID: 0}
+  - tabEducationIconImage: {instanceID: 0}
+  - tabSettingsIconImage: {instanceID: 0}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
